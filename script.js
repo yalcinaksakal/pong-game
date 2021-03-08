@@ -238,3 +238,7 @@ function startGame() {
 
 // On Load
 startGame();
+//onresize
+window.onresize = function () {
+  location.reload();
+};
