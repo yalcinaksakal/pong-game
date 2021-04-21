@@ -223,19 +223,36 @@ function startGame() {
   createCanvas();
   animate();
 
-  canvas.addEventListener("mousemove", e => {
-    // Compensate for canvas being centered
+  const mover = x => {
     paddleBottomX =
-      e.clientX - canvasPosition > 0 &&
-      e.clientX - canvasPosition < width - paddleWidth
-        ? e.clientX - canvasPosition
+      x - canvasPosition > 0 && x - canvasPosition < width - paddleWidth
+        ? x - canvasPosition
         : paddleBottomX;
+  };
+  if (
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    navigator.msMaxTouchPoints > 0
+  ) {
+    canvas.addEventListener("touchmove", e => {
+      mover(e.changedTouches[0].clientX);
+    });
+    canvas.addEventListener("touchstart", e => {
+      mover(e.changedTouches[0].clientX);
+    });
+  } else
+    canvas.addEventListener("mousemove", e => {
+      // Compensate for canvas being centered
+      mover(e.clientX);
 
-    // Hide Cursor
-    //canvas.style.cursor = "none";
-  });
+      // Hide Cursor
+      //canvas.style.cursor = "none";
+    });
 }
 
+//   document.addEventListener("mousemove", e => {
+//     mover(e.pageX, e.pageY);
+//   });
 // On Load
 startGame();
 //onresize
